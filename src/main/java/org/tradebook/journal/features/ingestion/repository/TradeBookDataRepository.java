@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.tradebook.journal.features.ingestion.dto.AggregatedTradeBookDataDto;
 import org.tradebook.journal.features.ingestion.entity.TradeBookData;
-import org.tradebook.journal.common.enums.TradeType;
 
 import java.util.List;
 import java.util.Set;
@@ -13,7 +12,7 @@ import java.util.UUID;
 
 public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Long> {
     @Query(value = """
-            SELECT new org.tradebook.journal.features.ingestion.dto.AggregatedTradeBookDataDto( 
+            SELECT new org.tradebook.journal.features.ingestion.dto.AggregatedTradeBookDataDto(
                 t.symbol,
                 t.orderId,
                 MAX(t.exchange),
@@ -39,15 +38,15 @@ public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Lo
 
     @Modifying
     @Query("""
-        UPDATE TradeBookData t
-            SET t.processedFlag = TRUE,
-                t.processedBatchId = :batchId,
-                t.processedAt = CURRENT_TIMESTAMP
-            WHERE t.processedFlag = FALSE
-              AND t.symbol = :symbol
-              AND t.tradeType = :tradeType
-              AND t.orderId = :orderId
-    """)
+                UPDATE TradeBookData t
+                    SET t.processedFlag = TRUE,
+                        t.processedBatchId = :batchId,
+                        t.processedAt = CURRENT_TIMESTAMP
+                    WHERE t.processedFlag = FALSE
+                      AND t.symbol = :symbol
+                      AND t.tradeType = :tradeType
+                      AND t.orderId = :orderId
+            """)
     void updateProcessedRecords(UUID batchId, String symbol, String tradeType, Long orderId);
 
     @Query("""

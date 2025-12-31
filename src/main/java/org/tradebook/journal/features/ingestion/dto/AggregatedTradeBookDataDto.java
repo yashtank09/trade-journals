@@ -1,8 +1,6 @@
 package org.tradebook.journal.features.ingestion.dto;
 
 import lombok.Data;
-import org.tradebook.journal.common.enums.TradeType;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +21,9 @@ public class AggregatedTradeBookDataDto {
     private BigDecimal averagePrice;
     private BigDecimal vwap;
 
-    public AggregatedTradeBookDataDto(String symbol, Long orderId, String exchange, LocalDate expiryDate, String isin, String segment, String series, String tradeType, LocalDate tradeDate, LocalDateTime orderExecutionTime, Long totalQuantity, BigDecimal averagePrice, BigDecimal vwap) {
+    public AggregatedTradeBookDataDto(String symbol, Long orderId, String exchange, LocalDate expiryDate, String isin,
+            String segment, String series, String tradeType, LocalDate tradeDate, LocalDateTime orderExecutionTime,
+            Long totalQuantity, BigDecimal averagePrice, BigDecimal vwap) {
         this.symbol = symbol;
         this.orderId = orderId;
         this.exchange = exchange;

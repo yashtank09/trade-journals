@@ -6,12 +6,10 @@ import org.springframework.stereotype.Service;
 import org.tradebook.journal.features.ingestion.dto.AggregatedTradeBookDataDto;
 import org.tradebook.journal.features.ingestion.entity.TradeBookMaster;
 import org.tradebook.journal.common.enums.TradeStatus;
-import org.tradebook.journal.common.enums.TradeType;
 import org.tradebook.journal.features.ingestion.repository.TradeBookDataRepository;
 import org.tradebook.journal.features.ingestion.repository.TradeBookMasterRepository;
 import org.tradebook.journal.common.util.TradeCalculationUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +29,8 @@ public class TradeMasterIngestionService {
 
             for (AggregatedTradeBookDataDto dataDto : tradeBookDataList) {
                 UUID recordBatchId = UUID.randomUUID();
-                tradeBookDataRepository.updateProcessedRecords(recordBatchId, dataDto.getSymbol(), dataDto.getTradeType(), dataDto.getOrderId());
+                tradeBookDataRepository.updateProcessedRecords(recordBatchId, dataDto.getSymbol(),
+                        dataDto.getTradeType(), dataDto.getOrderId());
             }
         } catch (Exception ex) {
             log.error("Failed to ingest trade book master data", ex);
