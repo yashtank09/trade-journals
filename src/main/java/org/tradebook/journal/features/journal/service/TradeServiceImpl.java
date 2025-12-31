@@ -138,6 +138,7 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TradeResponse getTrade(Long tradeId, Long userId) {
         Trade trade = tradeRepository.findById(tradeId)
                 .orElseThrow(() -> new TradeBookException("Trade not found"));
@@ -150,6 +151,7 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<TradeResponse> getTrades(Long userId, LocalDate startDate, LocalDate endDate) {
         List<Trade> trades = tradeRepository.findByUserIdAndTradeDateBetween(userId, startDate, endDate);
         return trades.stream().map(this::mapToResponse).collect(Collectors.toList());
