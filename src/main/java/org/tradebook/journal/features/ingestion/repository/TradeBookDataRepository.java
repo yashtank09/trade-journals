@@ -38,15 +38,15 @@ public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Lo
 
     @Modifying
     @Query("""
-                UPDATE TradeBookData t
-                    SET t.processedFlag = TRUE,
-                        t.processedBatchId = :batchId,
-                        t.processedAt = CURRENT_TIMESTAMP
-                    WHERE t.processedFlag = FALSE
-                      AND t.symbol = :symbol
-                      AND t.tradeType = :tradeType
-                      AND t.orderId = :orderId
-            """)
+        UPDATE TradeBookData t
+            SET t.processedFlag = TRUE,
+                t.processedBatchId = :batchId,
+                t.processedAt = CURRENT_TIMESTAMP
+            WHERE t.processedFlag = FALSE
+              AND t.symbol = :symbol
+              AND t.tradeType = :tradeType
+              AND t.orderId = :orderId
+    """)
     void updateProcessedRecords(UUID batchId, String symbol, String tradeType, Long orderId);
 
     @Query("""
