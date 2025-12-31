@@ -15,3 +15,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Created `CHANGELOG.md` to track architectural changes.
+- **Testing**: Added comprehensive unit tests for `AuthController`, `TradeController`, and `FileController`.
+- **Documentation**: Added Postman collection `docs/postman/TradeJournal_API.postman_collection.json` for API testing.
+
+### Fixed
+- **API**: Resolved `FileController` path mapping issue (moved to `/api/v1/file`).
+- **Configuration**: Fixed `server.servlet.context-path` duplication issue in `application.yml`.
+- **Security**: Whitelisted Swagger UI resources in `SecurityConfig` to fix 403 Forbidden errors.
+- **Tests**: Resolved compilation and runtime errors in unit tests.
