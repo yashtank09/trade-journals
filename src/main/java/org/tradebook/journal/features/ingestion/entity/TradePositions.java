@@ -1,9 +1,10 @@
-package org.tradebook.tradeprocessor.entity;
+package org.tradebook.journal.features.ingestion.entity;
 
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.tradebook.tradeprocessor.enums.PositionDirection;
+import org.tradebook.journal.common.enums.PositionDirection;
+import org.tradebook.journal.common.enums.PositionStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
