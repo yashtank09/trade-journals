@@ -102,6 +102,7 @@ trade:
   book:
     master:
       processing:
+        interval-ms: 90000
 
 security:
   jwt:
