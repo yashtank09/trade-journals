@@ -25,6 +25,7 @@ public class CreateTradeRequest {
     private BigDecimal quantity;
     private BigDecimal entryPrice;
     private LocalDateTime entryTime;
+    private java.time.LocalDate tradeDate;
 
     private CreateTradePlanRequest plan;
 

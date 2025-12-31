@@ -18,6 +18,7 @@ import org.tradebook.journal.features.journal.repository.TradeRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,20 +42,33 @@ public class TradeServiceImpl implements TradeService {
                 .orElseGet(() -> {
                     Instrument newInstrument = Instrument.builder()
                             .symbol(request.getSymbol())
-                            .exchange(request.getExchange())
-                            .type(request.getType())
+                            .exchange(request.getExchange() != null ? request.getExchange() : "NSE")
+                            .type(request.getType() != null ? request.getType() : "EQUITY")
                             .build();
                     return instrumentRepository.save(newInstrument);
                 });
 
+        LocalDate tradeDate = request.getTradeDate();
+        LocalDateTime entryTime = request.getEntryTime();
+
+        if (tradeDate == null && entryTime != null) {
+            tradeDate = entryTime.toLocalDate();
+        } else if (tradeDate == null) {
+            tradeDate = LocalDate.now();
+        }
+
+        if (entryTime == null) {
+            entryTime = tradeDate.atStartOfDay();
+        }
+
         Trade trade = Trade.builder()
                 .user(user)
                 .instrument(instrument)
-                .tradeDate(request.getEntryTime().toLocalDate())
+                .tradeDate(tradeDate)
                 .direction(request.getDirection())
                 .quantity(request.getQuantity())
                 .entryPrice(request.getEntryPrice())
-                .entryTime(request.getEntryTime())
+                .entryTime(entryTime)
                 .status("OPEN")
                 .build();
 
