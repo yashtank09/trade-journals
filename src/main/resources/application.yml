@@ -1,7 +1,7 @@
 server:
   port: ${SERVER_PORT:8085}
   servlet:
-    context-path: /
+    context-path: /api/v1
   compression:
     enabled: true
     min-response-size: 2KB

@@ -23,48 +23,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class FileControllerTest {
 
-        @Autowired
-        private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-        @MockBean
-        private FileProcessService fileProcessService;
+    @MockBean
+    private FileProcessService fileProcessService;
 
-        @MockBean
-        private org.tradebook.journal.config.security.JwtService jwtService;
+    @MockBean
+    private org.tradebook.journal.config.security.JwtService jwtService;
 
-        @MockBean
-        private org.tradebook.journal.config.security.JwtAuthenticationFilter jwtAuthenticationFilter;
+    @MockBean
+    private org.tradebook.journal.config.security.JwtAuthenticationFilter jwtAuthenticationFilter;
 
-        @Autowired
-        private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-        @Test
-        void uploadFile_ShouldReturnOk_WhenFileAndMetadataAreValid() throws Exception {
-                MockMultipartFile file = new MockMultipartFile(
-                                "file",
-                                "test.csv",
-                                MediaType.TEXT_PLAIN_VALUE,
-                                "header1,header2\nval1,val2".getBytes());
+    @Test
+    void uploadFile_ShouldReturnOk_WhenFileAndMetadataAreValid() throws Exception {
+            MockMultipartFile file = new MockMultipartFile(
+                            "file",
+                            "test.csv",
+                            MediaType.TEXT_PLAIN_VALUE,
+                            "header1,header2\nval1,val2".getBytes());
 
-                FileUploadRequest metadata = new FileUploadRequest();
-                metadata.setFileType("CSV");
-                metadata.setSourceSystem("UI");
-                metadata.setFileCategory(FileCategory.TRADE_BOOK);
+            FileUploadRequest metadata = new FileUploadRequest();
+            metadata.setFileType("CSV");
+            metadata.setSourceSystem("UI");
+            metadata.setFileCategory(FileCategory.TRADE_BOOK);
 
-                MockMultipartFile metadataPart = new MockMultipartFile(
-                                "file-metadata",
-                                "",
-                                MediaType.APPLICATION_JSON_VALUE,
-                                objectMapper.writeValueAsBytes(metadata));
+            MockMultipartFile metadataPart = new MockMultipartFile(
+                            "file-metadata",
+                            "",
+                            MediaType.APPLICATION_JSON_VALUE,
+                            objectMapper.writeValueAsBytes(metadata));
 
-                FileProcessor mockProcessor = new FileProcessor();
-                mockProcessor.setOriginalFileName("test.csv");
+            FileProcessor mockProcessor = new FileProcessor();
+            mockProcessor.setOriginalFileName("test.csv");
 
-                when(fileProcessService.uploadFile(any(FileUploadRequest.class), any())).thenReturn(mockProcessor);
+            when(fileProcessService.uploadFile(any(FileUploadRequest.class), any())).thenReturn(mockProcessor);
 
-                mockMvc.perform(multipart("/api/v1/file/upload")
-                                .file(file)
-                                .file(metadataPart))
-                                .andExpect(status().isOk());
-        }
+            mockMvc.perform(multipart("/file/upload")
+                            .file(file)
+                            .file(metadataPart))
+                            .andExpect(status().isOk());
+    }
 }
