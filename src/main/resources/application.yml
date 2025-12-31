@@ -102,4 +102,8 @@ trade:
   book:
     master:
       processing:
-        interval-ms: 90000
+
+security:
+  jwt:
+    secret-key: ${SECURITY_JWT_SECRET_KEY:ThisIsADefaultKeyForDevelopmentOnlyPleaseChangeInProductionToASecureHexKey}
+    expiration-ms: 86400000
