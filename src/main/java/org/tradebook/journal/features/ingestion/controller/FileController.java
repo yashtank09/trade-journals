@@ -12,7 +12,7 @@ import org.tradebook.journal.features.ingestion.entity.FileProcessor;
 import org.tradebook.journal.features.ingestion.service.FileProcessService;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/api/v1/file")
 public class FileController {
 
         private final FileProcessService storageService;
