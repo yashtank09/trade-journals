@@ -9,15 +9,15 @@ import org.tradebook.journal.features.ingestion.dto.request.FileUploadRequest;
 import org.tradebook.journal.features.ingestion.dto.response.DataApiResponse;
 import org.tradebook.journal.features.ingestion.dto.response.FileUploadResponse;
 import org.tradebook.journal.features.ingestion.entity.FileProcessor;
-import org.tradebook.journal.features.ingestion.service.LocalFileProcessService;
+import org.tradebook.journal.features.ingestion.service.FileProcessService;
 
 @RestController
 @RequestMapping("/file")
 public class FileController {
 
-        private final LocalFileProcessService storageService;
+        private final FileProcessService storageService;
 
-        public FileController(LocalFileProcessService storageService) {
+        public FileController(FileProcessService storageService) {
                 this.storageService = storageService;
         }
 
