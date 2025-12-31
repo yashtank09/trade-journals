@@ -25,7 +25,7 @@ public class TradeController {
 
     @PostMapping
     public ResponseEntity<TradeResponse> createTrade(
-            java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
             @RequestBody CreateTradeRequest request) {
         Long userId = getUserId(principal);
         TradeResponse response = tradeService.createTrade(userId, request);
@@ -34,7 +34,7 @@ public class TradeController {
 
     @PatchMapping("/{tradeId}")
     public ResponseEntity<TradeResponse> updateTrade(
-            java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
             @PathVariable Long tradeId,
             @RequestBody UpdateTradeRequest request) {
         Long userId = getUserId(principal);
@@ -44,7 +44,7 @@ public class TradeController {
 
     @GetMapping("/{tradeId}")
     public ResponseEntity<TradeResponse> getTrade(
-            java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
             @PathVariable Long tradeId) {
         Long userId = getUserId(principal);
         TradeResponse response = tradeService.getTrade(tradeId, userId);
@@ -53,7 +53,7 @@ public class TradeController {
 
     @GetMapping
     public ResponseEntity<List<TradeResponse>> getTrades(
-            java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         Long userId = getUserId(principal);
