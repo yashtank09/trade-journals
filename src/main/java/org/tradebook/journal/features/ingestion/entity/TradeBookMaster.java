@@ -2,6 +2,7 @@ package org.tradebook.journal.features.ingestion.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.tradebook.journal.common.entity.BaseEntity;
 import org.tradebook.journal.common.enums.TradeStatus;
 
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ import java.time.LocalDateTime;
         }
 )
 @Builder
-public class TradeBookMaster {
+public class TradeBookMaster extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -81,24 +82,6 @@ public class TradeBookMaster {
     @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    // --- JPA Lifecycle Callbacks for Auditing ---
-
-    // Sets createdAt and updatedAt before persisting
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // Updates updatedAt before updating the entity
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    @Column(name = "is_journaled")
+    private Boolean isJournaled = false;
 }

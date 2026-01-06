@@ -1,16 +1,17 @@
 package org.tradebook.journal.features.ingestion.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.tradebook.journal.common.entity.BaseEntity;
 import org.tradebook.journal.common.enums.FileCategory;
 import org.tradebook.journal.common.enums.JobStatus;
 
-import java.time.LocalDateTime;
-
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "file_jobs")
-public class FileProcessor {
+public class FileProcessor extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_job_id")
@@ -39,19 +40,4 @@ public class FileProcessor {
     @Enumerated(EnumType.STRING)
     private JobStatus status;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

@@ -3,6 +3,7 @@ package org.tradebook.journal.features.ingestion.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.tradebook.journal.common.entity.BaseEntity;
 import org.tradebook.journal.common.enums.PositionDirection;
 import org.tradebook.journal.common.enums.PositionStatus;
 
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
                 @Index(name = "idx_position_last_trade", columnList = "last_trade_id")
         }
 )
-public class TradePositions {
+public class TradePositions extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,27 +36,31 @@ public class TradePositions {
     @Column(name = "segment", nullable = false, length = 10)
     private String segment;
 
+    @Column(name = "exchange", length = 20)
+    private String exchange;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "direction", nullable = false, length = 10)
     private PositionDirection direction;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 10)
+    private PositionStatus status;
+
     @Column(name = "entry_qty", nullable = false)
     private Long entryQty;
 
-    @Column(name = "entry_avg_price", nullable = false)
+    @Column(name = "entry_avg_price", precision = 19, scale = 4, nullable = false)
     private BigDecimal entryAvgPrice;
 
     @Column(name = "exit_qty", nullable = false)
     private Long exitQty;
 
-    @Column(name = "exit_avg_price", nullable = false)
+    @Column(name = "exit_avg_price", precision = 19, scale = 4, nullable = false)
     private BigDecimal exitAvgPrice;
 
     @Column(name = "open_qty", nullable = false)
     private Long openQty;
-
-    @Column(name = "status", nullable = false, length = 10)
-    private PositionStatus status;
 
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
@@ -63,12 +68,12 @@ public class TradePositions {
     @Column(name = "colsed_at")
     private LocalDateTime closedAt;
 
+    @Column(name = "realized_pnl", precision = 19, scale = 2)
+    private BigDecimal realizedPnl;
+
     @Column(name = "last_trade_id")
     private Long lastTradeId;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "turnover", precision = 19, scale = 2)
+    private BigDecimal turnover;
 }

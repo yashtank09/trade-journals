@@ -41,6 +41,7 @@ spring:
         order_inserts: true
         order_updates: true
         generate_statistics: false
+    show-sql: true
 
   servlet:
     multipart:
@@ -62,7 +63,8 @@ logging:
     org.springframework.transaction: ${LOGGING_LEVEL_TX:DEBUG}
 
     # Hibernate (Enable only when debugging)
-    # org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     # org.hibernate.orm.jdbc.bind: TRACE
 
     # JDBC
@@ -101,6 +103,9 @@ file:
 trade:
   book:
     master:
+      processing:
+        interval-ms: 90000
+    position:
       processing:
         interval-ms: 90000
 
