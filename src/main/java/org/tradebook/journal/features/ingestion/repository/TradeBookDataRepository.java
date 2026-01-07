@@ -14,6 +14,7 @@ public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Lo
     @Query(value = """
             SELECT new org.tradebook.journal.features.ingestion.dto.AggregatedTradeBookDataDto(
                 t.symbol,
+                t.userId,
                 t.orderId,
                 MAX(t.exchange),
                 MAX(t.expiryDate),
@@ -31,7 +32,7 @@ public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Lo
                 TradeBookData t
             WHERE
                 t.processedFlag = FALSE
-            GROUP BY t.symbol , t.orderId , t.tradeType
+            GROUP BY t.userId, t.symbol , t.orderId , t.tradeType
             ORDER BY MIN(t.orderExecutionTime)
             """)
     List<AggregatedTradeBookDataDto> fetchAggregatedTrades();

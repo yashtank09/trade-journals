@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.tradebook.journal.common.enums.FileCategory;
+import org.tradebook.journal.config.security.JwtAuthenticationFilter;
+import org.tradebook.journal.config.security.JwtService;
 import org.tradebook.journal.features.ingestion.dto.request.FileUploadRequest;
 import org.tradebook.journal.features.ingestion.entity.FileProcessor;
 import org.tradebook.journal.features.ingestion.service.FileProcessService;
@@ -30,10 +32,10 @@ class FileControllerTest {
         private FileProcessService fileProcessService;
 
         @MockBean
-        private org.tradebook.journal.config.security.JwtService jwtService;
+        private JwtService jwtService;
 
         @MockBean
-        private org.tradebook.journal.config.security.JwtAuthenticationFilter jwtAuthenticationFilter;
+        private JwtAuthenticationFilter jwtAuthenticationFilter;
 
         @Autowired
         private ObjectMapper objectMapper;
@@ -60,7 +62,9 @@ class FileControllerTest {
                 FileProcessor mockProcessor = new FileProcessor();
                 mockProcessor.setOriginalFileName("test.csv");
 
-                when(fileProcessService.uploadFile(any(FileUploadRequest.class), any())).thenReturn(mockProcessor);
+                Long userId = 1L;
+
+                when(fileProcessService.uploadFile(userId, any(FileUploadRequest.class), any())).thenReturn(mockProcessor);
 
                 mockMvc.perform(multipart("/api/v1/file/upload")
                                 .file(file)

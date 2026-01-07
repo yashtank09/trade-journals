@@ -63,7 +63,7 @@ public class TradeDataIngestionService {
             for (TradeBookCsvDto tradeBookCsvDto : csvToBean) {
                 try {
 
-                    TradeBookData entity = mapToEntity(tradeBookCsvDto, fileJob.getFileJobId());
+                    TradeBookData entity = mapToEntity(tradeBookCsvDto, fileJob.getFileJobId(), fileJob.getUserId());
 
                     batch.add(entity);
                     batchTradeIds.add(tradeBookCsvDto.getTradeId());
@@ -88,9 +88,10 @@ public class TradeDataIngestionService {
     }
 
 
-    private TradeBookData mapToEntity(TradeBookCsvDto tradeBookCsvDto, Long fileJobId) {
+    private TradeBookData mapToEntity(TradeBookCsvDto tradeBookCsvDto, Long fileJobId, Long userId) {
         try {
             TradeBookData entity = new TradeBookData();
+            entity.setUserId(userId);
             entity.setSymbol(tradeBookCsvDto.getSymbol());
             entity.setIsin(tradeBookCsvDto.getIsin());
             entity.setTradeDate(tradeBookCsvDto.getTradeDate());

@@ -41,7 +41,7 @@ public class LocalFileProcessService implements FileProcessService {
         }
 
         // Add file size check (e.g., 10MB limit)
-        long maxFileSize = 10 * 1024 * 1024; // 10MB
+        long maxFileSize = 10L * 1024 * 1024; // 10MB
         if (file.getSize() > maxFileSize) {
             throw new FileValidationException("File size exceeds maximum limit of 10MB");
         }
@@ -53,14 +53,14 @@ public class LocalFileProcessService implements FileProcessService {
         }
 
         String fileType = fileName.split("\\.")[1];
-        List<String> suppertedTypes = storageProperties.getSupportedTypes();
-        if (!suppertedTypes.contains(fileType)) {
+        List<String> supportedTypes = storageProperties.getSupportedTypes();
+        if (!supportedTypes.contains(fileType)) {
             throw new FileValidationException("Unsupported file type: " + fileType);
         }
     }
 
     @Override
-    public FileProcessor uploadFile(FileUploadRequest fileRequest, MultipartFile file) {
+    public FileProcessor uploadFile(Long userId, FileUploadRequest fileRequest, MultipartFile file) {
         validateFile(file);
         try {
             Files.createDirectories(Paths.get(storageProperties.getUploadDir()));
@@ -72,6 +72,7 @@ public class LocalFileProcessService implements FileProcessService {
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
             FileProcessor job = new FileProcessor();
+            job.setUserId(userId);
             job.setOriginalFileName(file.getOriginalFilename());
             job.setStoredFileName(storedFileName);
             job.setStoredPath(destination.toString());

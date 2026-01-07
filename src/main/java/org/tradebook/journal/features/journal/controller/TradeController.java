@@ -5,11 +5,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tradebook.journal.features.auth.repository.UserRepository;
 import org.tradebook.journal.features.journal.dto.request.CreateTradeRequest;
 import org.tradebook.journal.features.journal.dto.request.UpdateTradeRequest;
 import org.tradebook.journal.features.journal.dto.response.TradeResponse;
 import org.tradebook.journal.features.journal.service.TradeService;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,11 +23,11 @@ public class TradeController {
     private final TradeService tradeService;
 
     // TODO: Get userId from Security Context
-    private final org.tradebook.journal.features.auth.repository.UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<TradeResponse> createTrade(
-            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) Principal principal,
             @RequestBody CreateTradeRequest request) {
         Long userId = getUserId(principal);
         TradeResponse response = tradeService.createTrade(userId, request);
@@ -34,7 +36,7 @@ public class TradeController {
 
     @PatchMapping("/{tradeId}")
     public ResponseEntity<TradeResponse> updateTrade(
-            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) Principal principal,
             @PathVariable Long tradeId,
             @RequestBody UpdateTradeRequest request) {
         Long userId = getUserId(principal);
@@ -44,7 +46,7 @@ public class TradeController {
 
     @GetMapping("/{tradeId}")
     public ResponseEntity<TradeResponse> getTrade(
-            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) Principal principal,
             @PathVariable Long tradeId) {
         Long userId = getUserId(principal);
         TradeResponse response = tradeService.getTrade(tradeId, userId);
@@ -53,7 +55,7 @@ public class TradeController {
 
     @GetMapping
     public ResponseEntity<List<TradeResponse>> getTrades(
-            @io.swagger.v3.oas.annotations.Parameter(hidden = true) java.security.Principal principal,
+            @io.swagger.v3.oas.annotations.Parameter(hidden = true) Principal principal,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         Long userId = getUserId(principal);
@@ -61,7 +63,7 @@ public class TradeController {
         return ResponseEntity.ok(response);
     }
 
-    private Long getUserId(java.security.Principal principal) {
+    private Long getUserId(Principal principal) {
         return userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new org.tradebook.journal.common.exception.TradeBookException("User not found"))
                 .getId();

@@ -30,6 +30,9 @@ public class TradePositions extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @Column(name = "symbol", nullable = false, length = 50)
     private String symbol;
 
@@ -65,7 +68,7 @@ public class TradePositions extends BaseEntity {
     @Column(name = "opened_at", nullable = false)
     private LocalDateTime openedAt;
 
-    @Column(name = "colsed_at")
+    @Column(name = "closed_at")
     private LocalDateTime closedAt;
 
     @Column(name = "realized_pnl", precision = 19, scale = 2)

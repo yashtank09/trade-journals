@@ -34,13 +34,15 @@ public class TradePositionDiscoveryService {
         PositionDirection incomingDirection = getDirection(trade.getTradeType());
         PositionDirection targetOppositeDirection = getOppositeDirection(incomingDirection);
 
-        List<TradePositions> openPositions = tradePositionRepository.findBySymbolAndDirectionAndStatusInOrderByCreatedAtAsc(
+        List<TradePositions> openPositions = tradePositionRepository.findByUserIdAndSymbolAndSegmentAndDirectionAndStatusInOrderByCreatedAtAsc(
+                trade.getUserId(),
                 trade.getSymbol(),
+                trade.getSegment(),
                 targetOppositeDirection,
                 List.of(PositionStatus.OPEN, PositionStatus.PARTIAL)
         );
 
-        long qtyToProcess = trade.getTotalQuantity();
+        long qtyToProcess = Math.abs(trade.getTotalQuantity());
 
         for (TradePositions position : openPositions) {
             if (qtyToProcess <= 0) break;
@@ -63,6 +65,7 @@ public class TradePositionDiscoveryService {
 
     private void createNewPosition(TradeBookMaster trade, PositionDirection direction, long quantity) {
         TradePositions newPos = TradePositions.builder()
+                .userId(trade.getUserId())
                 .symbol(trade.getSymbol())
                 .segment(trade.getSegment())
                 .exchange(trade.getExchange())

@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface TradePositionRepository extends JpaRepository<TradePositions, Long> {
 
-    List<TradePositions> findBySymbolAndDirectionAndStatusInOrderByCreatedAtAsc(String symbol, PositionDirection direction, Collection<PositionStatus> statuses);
+    List<TradePositions> findByUserIdAndSymbolAndSegmentAndDirectionAndStatusInOrderByCreatedAtAsc(Long userId, String symbol, String segment, PositionDirection direction, Collection<PositionStatus> statuses);
 }

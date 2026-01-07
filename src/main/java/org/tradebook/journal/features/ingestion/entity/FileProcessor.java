@@ -17,6 +17,9 @@ public class FileProcessor extends BaseEntity {
     @Column(name = "file_job_id")
     private Long fileJobId;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @Column(name = "orignal_file_name", nullable = false)
     private String originalFileName;
 

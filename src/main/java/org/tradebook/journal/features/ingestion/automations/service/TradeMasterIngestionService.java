@@ -41,6 +41,7 @@ public class TradeMasterIngestionService {
 
     private TradeBookMaster mapToEntity(AggregatedTradeBookDataDto dataDto) {
         TradeBookMaster masterData = new TradeBookMaster();
+        masterData.setUserId(dataDto.getUserId());
         masterData.setExchange(dataDto.getExchange());
         masterData.setSegment(dataDto.getSegment());
         masterData.setExpiryDate(dataDto.getExpiryDate());

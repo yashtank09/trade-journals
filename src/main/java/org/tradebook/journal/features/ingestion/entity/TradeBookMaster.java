@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_trade_execution",
                         columnNames = {
+                                "user_id",
                                 "symbol",
                                 "order_execution_time",
                                 "trade_type",
@@ -27,9 +28,9 @@ import java.time.LocalDateTime;
                 )
         },
         indexes = {
-                @Index(name = "idx_trade_date", columnList = "trade_date"),
-                @Index(name = "idx_symbol", columnList = "symbol"),
-                @Index(name = "idx_order_execution_time", columnList = "order_execution_time")
+                @Index(name = "idx_trade_date", columnList = "user_id, trade_date"),
+                @Index(name = "idx_symbol", columnList = "user_id, symbol"),
+                @Index(name = "idx_order_execution_time", columnList = "user_id, order_execution_time")
         }
 )
 @Builder
@@ -38,6 +39,9 @@ public class TradeBookMaster extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name = "order_id", nullable = false)
     private Long orderId;
