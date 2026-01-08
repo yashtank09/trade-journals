@@ -48,25 +48,25 @@ class TradeControllerTest {
 
     @Test
     void createTrade_ShouldReturnCreated_WhenRequestIsValid() throws Exception {
-        CreateTradeRequest request = CreateTradeRequest.builder()
-                .symbol("AAPL")
-                .build(); // Add other necessary fields
+            CreateTradeRequest request = CreateTradeRequest.builder()
+                            .symbol("AAPL")
+                            .build(); // Add other necessary fields
 
-        Principal mockPrincipal = mock(Principal.class);
-        when(mockPrincipal.getName()).thenReturn("test@example.com");
+            Principal mockPrincipal = mock(Principal.class);
+            when(mockPrincipal.getName()).thenReturn("test@example.com");
 
-        User mockUser = new User();
-        mockUser.setId(1L);
-        mockUser.setEmail("test@example.com");
+            User mockUser = new User();
+            mockUser.setId(1L);
+            mockUser.setEmail("test@example.com");
 
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockUser));
-        when(tradeService.createTrade(eq(1L), any(CreateTradeRequest.class)))
-                .thenReturn(TradeResponse.builder().id(100L).build());
+            when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockUser));
+            when(tradeService.createTrade(eq(1L), any(CreateTradeRequest.class)))
+                            .thenReturn(TradeResponse.builder().id(100L).build());
 
-        mockMvc.perform(post("/api/v1/trades")
-                .principal(mockPrincipal)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+            mockMvc.perform(post("/trades")
+                            .principal(mockPrincipal)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                            .andExpect(status().isCreated());
     }
 }

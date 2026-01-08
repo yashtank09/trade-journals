@@ -12,7 +12,7 @@ import org.tradebook.journal.features.auth.dto.RegisterRequest;
 import org.tradebook.journal.features.auth.service.AuthService;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService service;

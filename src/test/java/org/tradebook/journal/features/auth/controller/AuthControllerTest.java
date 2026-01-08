@@ -40,42 +40,42 @@ class AuthControllerTest {
 
     @Test
     void register_ShouldReturnOk_WhenRequestIsValid() throws Exception {
-        RegisterRequest request = RegisterRequest.builder()
-                .email("john@example.com")
-                .password("password")
-                .currency("USD")
-                .build();
+            RegisterRequest request = RegisterRequest.builder()
+                            .email("john@example.com")
+                            .password("password")
+                            .currency("USD")
+                            .build();
 
-        AuthResponse response = AuthResponse.builder()
-                .token("jwt-token")
-                .build();
+            AuthResponse response = AuthResponse.builder()
+                            .token("jwt-token")
+                            .build();
 
-        when(authService.register(any(RegisterRequest.class))).thenReturn(response);
+            when(authService.register(any(RegisterRequest.class))).thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("jwt-token"));
+            mockMvc.perform(post("/auth/register")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                            .andExpect(status().isOk())
+                            .andExpect(jsonPath("$.token").value("jwt-token"));
     }
 
     @Test
     void authenticate_ShouldReturnOk_WhenCredentialsAreValid() throws Exception {
-        LoginRequest request = LoginRequest.builder()
-                .email("john@example.com")
-                .password("password")
-                .build();
+            LoginRequest request = LoginRequest.builder()
+                            .email("john@example.com")
+                            .password("password")
+                            .build();
 
-        AuthResponse response = AuthResponse.builder()
-                .token("jwt-token")
-                .build();
+            AuthResponse response = AuthResponse.builder()
+                            .token("jwt-token")
+                            .build();
 
-        when(authService.authenticate(any(LoginRequest.class))).thenReturn(response);
+            when(authService.authenticate(any(LoginRequest.class))).thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("jwt-token"));
+            mockMvc.perform(post("/auth/login")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                            .andExpect(status().isOk())
+                            .andExpect(jsonPath("$.token").value("jwt-token"));
     }
 }
