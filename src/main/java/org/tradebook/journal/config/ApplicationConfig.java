@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.tradebook.journal.config.security.AppUserDetails;
 import org.tradebook.journal.features.auth.repository.UserRepository;
 
 @Configuration
@@ -22,11 +23,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .map(user -> org.springframework.security.core.userdetails.User.builder()
-                        .username(user.getEmail())
-                        .password(user.getPasswordHash())
-                        .roles("USER")
-                        .build())
+                .map(AppUserDetails::new) // Map the Entity to your new wrapper
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

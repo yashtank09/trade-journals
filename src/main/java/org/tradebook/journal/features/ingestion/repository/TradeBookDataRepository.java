@@ -14,6 +14,7 @@ public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Lo
     @Query(value = """
             SELECT new org.tradebook.journal.features.ingestion.dto.AggregatedTradeBookDataDto(
                 t.symbol,
+                t.userId,
                 t.orderId,
                 MAX(t.exchange),
                 MAX(t.expiryDate),
@@ -31,22 +32,22 @@ public interface TradeBookDataRepository extends JpaRepository<TradeBookData, Lo
                 TradeBookData t
             WHERE
                 t.processedFlag = FALSE
-            GROUP BY t.symbol , t.orderId , t.tradeType
+            GROUP BY t.userId, t.symbol , t.orderId , t.tradeType
             ORDER BY MIN(t.orderExecutionTime)
             """)
     List<AggregatedTradeBookDataDto> fetchAggregatedTrades();
 
     @Modifying
     @Query("""
-                UPDATE TradeBookData t
-                    SET t.processedFlag = TRUE,
-                        t.processedBatchId = :batchId,
-                        t.processedAt = CURRENT_TIMESTAMP
-                    WHERE t.processedFlag = FALSE
-                      AND t.symbol = :symbol
-                      AND t.tradeType = :tradeType
-                      AND t.orderId = :orderId
-            """)
+        UPDATE TradeBookData t
+            SET t.processedFlag = TRUE,
+                t.processedBatchId = :batchId,
+                t.processedAt = CURRENT_TIMESTAMP
+            WHERE t.processedFlag = FALSE
+              AND t.symbol = :symbol
+              AND t.tradeType = :tradeType
+              AND t.orderId = :orderId
+    """)
     void updateProcessedRecords(UUID batchId, String symbol, String tradeType, Long orderId);
 
     @Query("""

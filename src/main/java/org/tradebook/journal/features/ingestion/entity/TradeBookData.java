@@ -1,9 +1,8 @@
 package org.tradebook.journal.features.ingestion.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.tradebook.journal.common.entity.BaseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,28 +13,36 @@ import java.util.UUID;
 @Table(
         name = "trade_book_data",
         indexes = {
-                // Processing
-                @Index(name = "idx_trade_processed_flag", columnList = "processed_flag"),
-                @Index(name = "idx_trade_processed_batch", columnList = "processed_batch_id"),
-                @Index(name = "idx_trade_unprocessed_date", columnList = "processed_flag, trade_date"),
+                // Processing Grouping (Used by fetchAggregatedTrades)
+                // Includes user_id so we group strictly by user
+                @Index(name = "idx_process_group", columnList = "processed_flag, user_id, symbol, order_id"),
 
-                // Trade grouping
-                @Index(name = "idx_trade_order_id", columnList = "order_id"),
-                @Index(name = "idx_trade_trade_id", columnList = "trade_id"),
+                // Deduplication Check (Used by findExistingTradeIds)
+                // Crucial: Checks if THIS user already has this trade_id
+                @Index(name = "idx_dedupe_check", columnList = "user_id, trade_id"),
 
-                // Analytics
-                @Index(name = "idx_trade_symbol", columnList = "symbol"),
-                @Index(name = "idx_trade_exchange_segment", columnList = "exchange, segment")
+                // Update Flag (Used by updateProcessedRecords)
+                // Find rows to mark complete for a specific user
+                @Index(name = "idx_update_process", columnList = "user_id, symbol, order_id"),
+
+                // Analytics / Filtering helpers
+                @Index(name = "idx_user_symbol", columnList = "user_id, symbol"),
+                @Index(name = "idx_user_date", columnList = "user_id, trade_date")
         }
 )
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TradeBookData {
+public class TradeBookData extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name = "trade_id", nullable = false)
     private Long tradeId;
@@ -90,26 +97,4 @@ public class TradeBookData {
 
     @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    // Sets createdAt and updatedAt before persisting
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        if (this.processedFlag == null) {
-            this.processedFlag = false;
-        }
-    }
-
-    // Updates updatedAt before updating the entity
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

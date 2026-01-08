@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class AggregatedTradeBookDataDto {
+    private Long userId;
     private String symbol;
     private Long orderId;
     private String exchange;
@@ -21,9 +22,10 @@ public class AggregatedTradeBookDataDto {
     private BigDecimal averagePrice;
     private BigDecimal vwap;
 
-    public AggregatedTradeBookDataDto(String symbol, Long orderId, String exchange, LocalDate expiryDate, String isin,
+    public AggregatedTradeBookDataDto(Long userId, String symbol, Long orderId, String exchange, LocalDate expiryDate, String isin,
             String segment, String series, String tradeType, LocalDate tradeDate, LocalDateTime orderExecutionTime,
             Long totalQuantity, BigDecimal averagePrice, BigDecimal vwap) {
+        this.userId = userId;
         this.symbol = symbol;
         this.orderId = orderId;
         this.exchange = exchange;

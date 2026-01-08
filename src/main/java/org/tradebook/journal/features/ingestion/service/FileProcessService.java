@@ -5,5 +5,5 @@ import org.tradebook.journal.features.ingestion.dto.request.FileUploadRequest;
 import org.tradebook.journal.features.ingestion.entity.FileProcessor;
 
 public interface FileProcessService {
-    FileProcessor uploadFile(FileUploadRequest fileRequest, MultipartFile file);
+    FileProcessor uploadFile(Long userId, FileUploadRequest fileRequest, MultipartFile file);
 }

@@ -2,6 +2,7 @@ package org.tradebook.journal.features.ingestion.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.tradebook.journal.common.entity.BaseEntity;
 import org.tradebook.journal.common.enums.TradeStatus;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_trade_execution",
                         columnNames = {
+                                "user_id",
                                 "symbol",
                                 "order_execution_time",
                                 "trade_type",
@@ -26,17 +28,20 @@ import java.time.LocalDateTime;
                 )
         },
         indexes = {
-                @Index(name = "idx_trade_date", columnList = "trade_date"),
-                @Index(name = "idx_symbol", columnList = "symbol"),
-                @Index(name = "idx_order_execution_time", columnList = "order_execution_time")
+                @Index(name = "idx_trade_date", columnList = "user_id, trade_date"),
+                @Index(name = "idx_symbol", columnList = "user_id, symbol"),
+                @Index(name = "idx_order_execution_time", columnList = "user_id, order_execution_time")
         }
 )
 @Builder
-public class TradeBookMaster {
+public class TradeBookMaster extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name = "order_id", nullable = false)
     private Long orderId;
@@ -81,24 +86,6 @@ public class TradeBookMaster {
     @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    // --- JPA Lifecycle Callbacks for Auditing ---
-
-    // Sets createdAt and updatedAt before persisting
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // Updates updatedAt before updating the entity
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    @Column(name = "is_journaled")
+    private Boolean isJournaled = false;
 }
